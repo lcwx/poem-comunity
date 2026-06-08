@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #1a1a1a;
+  --paper: #f5f0e8;
+  --paper-dark: #ede8dc;
+  --accent: #8b4513;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: "Noto Serif SC", "STSong", "SimSun", Georgia, serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

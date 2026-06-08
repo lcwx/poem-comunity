@@ -1,0 +1,56 @@
+# 生产编排：Qdrant + 后端(API embedding) + 前端 + Caddy 反代/HTTPS
+# 用法见 deploy/README.md。环境变量从同目录 .env 读取（参考 .env.prod.example）。
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.11.0
+    restart: unless-stopped
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    # 不对外暴露端口，仅 backend 内部访问
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../deploy/backend.Dockerfile
+    restart: unless-stopped
+    environment:
+      EMBED_BACKEND: api
+      EMBED_API_BASE: ${EMBED_API_BASE:-https://api.siliconflow.cn/v1}
+      EMBED_API_MODEL: ${EMBED_API_MODEL:-BAAI/bge-m3}
+      EMBED_API_KEY: ${EMBED_API_KEY:?需在 .env 设置 SiliconFlow API key}
+      QDRANT_URL: http://qdrant:6333
+    depends_on:
+      - qdrant
+
+  frontend:
+    build:
+      context: ../web
+      dockerfile: ../deploy/frontend.Dockerfile
+    restart: unless-stopped
+    environment:
+      # Next 服务端反代 /api 的目标
+      BACKEND_URL: http://backend:8000
+    depends_on:
+      - backend
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # 有域名填域名(自动 HTTPS)；无域名用 :80(仅 HTTP，按 IP 访问)
+      SITE_ADDRESS: ${SITE_ADDRESS::80}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+
+volumes:
+  qdrant_storage:
+  caddy_data:
+  caddy_config:

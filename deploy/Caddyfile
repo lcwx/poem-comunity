@@ -1,0 +1,9 @@
+# Caddy 反代配置。SITE_ADDRESS 由 compose 注入：
+#   - 填域名（如 poems.example.com）→ Caddy 自动申请 Let's Encrypt 证书，HTTPS
+#   - 填 :80 → 仅 HTTP，用服务器 IP 直接访问（无域名时）
+{$SITE_ADDRESS} {
+	encode gzip
+
+	# 全部转给 Next 前端；前端内部再把 /api/* 反代到 backend:8000
+	reverse_proxy frontend:3000
+}

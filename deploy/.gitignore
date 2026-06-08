@@ -1,0 +1,8 @@
+# 密钥与状态文件，绝不进 git
+.env
+terraform/terraform.tfvars
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/crash.log

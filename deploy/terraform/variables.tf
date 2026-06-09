@@ -35,9 +35,9 @@ variable "system_disk_size" {
 }
 
 variable "internet_bandwidth" {
-  description = "公网出带宽峰值 Mbps（按固定带宽计费时影响价格）"
+  description = "公网出带宽峰值上限 Mbps（按流量计费，仅封顶不固定收费；突发访问更顺）"
   type        = number
-  default     = 5
+  default     = 100
 }
 
 # --- 应用层参数（注入 cloud-init）---

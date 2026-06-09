@@ -58,18 +58,19 @@ resource "alicloud_security_group_rule" "https" {
 # --- ECS 实例 ---
 
 resource "alicloud_instance" "main" {
-  instance_name        = "poem-comunity"
-  instance_type        = var.instance_type
-  image_id             = data.alicloud_images.ubuntu.images[0].id
-  security_groups      = [alicloud_security_group.main.id]
-  vswitch_id           = alicloud_vswitch.main.id
-  password             = var.instance_password
+  instance_name   = "poem-comunity"
+  instance_type   = var.instance_type
+  image_id        = data.alicloud_images.ubuntu.images[0].id
+  security_groups = [alicloud_security_group.main.id]
+  vswitch_id      = alicloud_vswitch.main.id
+  password        = var.instance_password
 
   system_disk_category = "cloud_essd"
   system_disk_size     = var.system_disk_size
 
-  # 分配公网 IP（按固定带宽计费）
-  internet_charge_type       = "PayByBandwidth"
+  # 分配公网 IP（按流量计费：闲时不花钱，只为实际跑出的流量付费，
+  # 适合文本为主、大部分时间空闲的站点。max_bandwidth_out 仅为峰值上限，不固定收费）
+  internet_charge_type       = "PayByTraffic"
   internet_max_bandwidth_out = var.internet_bandwidth
 
   # 首次启动自动部署

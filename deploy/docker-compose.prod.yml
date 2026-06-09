@@ -42,7 +42,7 @@ services:
       - "443:443"
     environment:
       # 有域名填域名(自动 HTTPS)；无域名用 :80(仅 HTTP，按 IP 访问)
-      SITE_ADDRESS: ${SITE_ADDRESS::80}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

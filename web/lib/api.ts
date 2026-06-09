@@ -1,9 +1,12 @@
 import type { Poem, SearchResponse } from "./types";
 
-// 服务端渲染时需要绝对 URL，客户端可用相对路径
+// SSR（服务端）时直连后端容器；客户端用相对路径走自身 /api 代理
+// NEXT_PUBLIC_API_BASE 可覆盖（本地开发不设则走 /api）
 const BASE =
   process.env.NEXT_PUBLIC_API_BASE ??
-  (typeof window === "undefined" ? "http://localhost:3000/api" : "/api");
+  (typeof window === "undefined"
+    ? process.env.BACKEND_URL ?? "http://backend:8000"
+    : "/api");
 
 export async function searchPoems(query: string, limit = 10, dynasties: string[] = []): Promise<SearchResponse> {
   const res = await fetch(`${BASE}/search`, {

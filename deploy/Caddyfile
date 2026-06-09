@@ -4,6 +4,14 @@
 {$SITE_ADDRESS} {
 	encode gzip
 
-	# 全部转给 Next 前端；前端内部再把 /api/* 反代到 backend:8000
-	reverse_proxy frontend:3000
+	# /api/* 直接代理到后端，省去前端中转
+	handle /api/* {
+		uri strip_prefix /api
+		reverse_proxy backend:8000
+	}
+
+	# 其余全部交给 Next.js 前端
+	handle {
+		reverse_proxy frontend:3000
+	}
 }

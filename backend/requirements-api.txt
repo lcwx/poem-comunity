@@ -7,3 +7,4 @@ qdrant-client==1.11.3
 numpy==2.1.0
 python-dotenv==1.0.1
 httpx==0.27.2
+opencc-python-reimplemented==0.1.7

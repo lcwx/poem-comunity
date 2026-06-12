@@ -128,7 +128,7 @@ export default async function Home({ searchParams }: Props) {
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-10">
           <h1 className="text-3xl font-bold tracking-widest mb-2">找诗诗 🔍</h1>
-          <p className="text-sm text-gray-500">用一句话找到若干首懂你的诗</p>
+          <p className="text-sm text-gray-500">AI语义搜索古诗词</p>
         </header>
 
         <div className="mb-10">

@@ -47,7 +47,7 @@ export default function SearchBox({ defaultValue = "", dynasties = [], selected 
           type="submit"
           className="px-6 py-3 rounded-lg bg-[color:var(--accent)] text-white font-medium hover:opacity-90 transition-opacity"
         >
-          寻诗
+          go
         </button>
       </form>
 

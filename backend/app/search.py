@@ -1,5 +1,6 @@
 import os
 import random
+from functools import lru_cache
 from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchAny, ScoredPoint
 
@@ -7,6 +8,9 @@ from app.embed import encode
 from app.models import PoemResult
 
 COLLECTION = "poems"
+# 一次拿够前端分页需要的最大量
+_PAGE_SIZE = 10
+_MAX_RESULTS = 50
 
 
 def get_client() -> QdrantClient:
@@ -27,14 +31,16 @@ def _point_to_result(point: ScoredPoint) -> PoemResult:
     )
 
 
-def search(query: str, limit: int = 10, dynasties: list[str] | None = None) -> list[PoemResult]:
+@lru_cache(maxsize=512)
+def _search_cached(query: str, limit: int, dynasties_key: tuple[str, ...] | None) -> list[PoemResult]:
+    """缓存 key = (query, limit, dynasties_tuple)，相同搜索直接返回缓存结果。"""
     client = get_client()
     query_vec = encode([query])[0]
 
     search_filter = None
-    if dynasties:
+    if dynasties_key:
         search_filter = Filter(
-            must=[FieldCondition(key="dynasty", match=MatchAny(any=dynasties))]
+            must=[FieldCondition(key="dynasty", match=MatchAny(any=list(dynasties_key)))]
         )
 
     hits = client.search(
@@ -45,6 +51,11 @@ def search(query: str, limit: int = 10, dynasties: list[str] | None = None) -> l
         with_payload=True,
     )
     return [_point_to_result(h) for h in hits]
+
+
+def search(query: str, limit: int = 10, dynasties: list[str] | None = None) -> list[PoemResult]:
+    dynasties_key = tuple(sorted(dynasties)) if dynasties else None
+    return _search_cached(query, limit, dynasties_key)
 
 
 def get_by_id(poem_id: str) -> PoemResult | None:

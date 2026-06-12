@@ -8,7 +8,7 @@ const BASE =
     ? process.env.BACKEND_URL ?? "http://backend:8000"
     : "/api");
 
-export async function searchPoems(query: string, limit = 10, dynasties: string[] = []): Promise<SearchResponse> {
+export async function searchPoems(query: string, limit = 50, dynasties: string[] = []): Promise<SearchResponse> {
   const res = await fetch(`${BASE}/search`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

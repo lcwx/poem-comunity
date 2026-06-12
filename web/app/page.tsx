@@ -48,10 +48,13 @@ async function RandomPoems() {
 }
 
 const DYNASTY_ORDER = ["楚辞", "诗经", "唐", "宋词", "元", "现代"];
+const DEFAULT_DYNASTIES = ["楚辞", "诗经", "唐", "宋词"];
 
 export default async function Home({ searchParams }: Props) {
   const query = searchParams.q?.trim() ?? "";
-  const selectedDynasties = searchParams.d ? searchParams.d.split(",").filter(Boolean) : [];
+  const selectedDynasties = searchParams.d
+    ? searchParams.d.split(",").filter(Boolean)
+    : DEFAULT_DYNASTIES;
   const rawDynasties = await getDynasties();
   const allDynasties = [...rawDynasties].sort(
     (a, b) => {

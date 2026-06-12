@@ -27,6 +27,7 @@ export default function SearchBox({ defaultValue = "", dynasties = [], selected 
     const q = value.trim();
     if (!q) return;
     const params = new URLSearchParams({ q });
+    // 始终把当前勾选写入 URL，保证搜索结果和过滤器一致
     if (checked.size > 0) params.set("d", [...checked].join(","));
     router.push(`/?${params.toString()}`);
   }

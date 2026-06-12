@@ -9,6 +9,8 @@ interface Props {
   selected?: string[];
 }
 
+const PLACEHOLDER = "广州的天气好湿热啊";
+
 export default function SearchBox({ defaultValue = "", dynasties = [], selected = [] }: Props) {
   const router = useRouter();
   const [value, setValue] = useState(defaultValue);
@@ -24,10 +26,8 @@ export default function SearchBox({ defaultValue = "", dynasties = [], selected 
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const q = value.trim();
-    if (!q) return;
+    const q = value.trim() || PLACEHOLDER;
     const params = new URLSearchParams({ q });
-    // 始终把当前勾选写入 URL，保证搜索结果和过滤器一致
     if (checked.size > 0) params.set("d", [...checked].join(","));
     router.push(`/?${params.toString()}`);
   }
@@ -39,7 +39,7 @@ export default function SearchBox({ defaultValue = "", dynasties = [], selected 
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="广州的天气好湿热啊"
+          placeholder={PLACEHOLDER}
           className="flex-1 px-4 py-3 rounded-lg border border-[color:var(--paper-dark)] bg-white/70 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:ring-opacity-40 text-base"
           aria-label="诗词搜索"
         />

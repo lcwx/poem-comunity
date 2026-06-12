@@ -38,7 +38,7 @@ export default function SearchBox({ defaultValue = "", dynasties = [], selected 
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="用心情、意境、主题来寻诗……"
+          placeholder="你现在是什么心情？或者想找什么感觉的诗……"
           className="flex-1 px-4 py-3 rounded-lg border border-[color:var(--paper-dark)] bg-white/70 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:ring-opacity-40 text-base"
           aria-label="诗词搜索"
         />

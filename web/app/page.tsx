@@ -68,8 +68,8 @@ export default async function Home({ searchParams }: Props) {
     <main className="min-h-screen px-4 py-12">
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-10">
-          <h1 className="text-3xl font-bold tracking-widest mb-2">诗社</h1>
-          <p className="text-sm text-gray-500">用心情、意境，寻一首今日的诗</p>
+          <h1 className="text-3xl font-bold tracking-widest mb-2">找诗诗 🔍</h1>
+          <p className="text-sm text-gray-500">说说你的心情，我去找诗</p>
         </header>
 
         <div className="mb-10">

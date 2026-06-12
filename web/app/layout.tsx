@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "诗社 · 语义诗词检索",
-  description: "用自然语言检索古典诗词，感受文字之美",
+  title: "找诗诗 · 用心情找一首诗",
+  description: "别背诗了，跟找诗诗说说你的心情，它来找诗",
 };
 
 export default function RootLayout({

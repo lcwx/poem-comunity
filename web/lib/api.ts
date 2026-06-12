@@ -28,7 +28,7 @@ export async function getPoem(id: string): Promise<Poem> {
 }
 
 export async function getDynasties(): Promise<string[]> {
-  const res = await fetch(`${BASE}/dynasties`, { cache: "force-cache" });
+  const res = await fetch(`${BASE}/dynasties`, { cache: "no-store" });
   if (!res.ok) return [];
   return res.json();
 }

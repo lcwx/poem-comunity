@@ -47,10 +47,22 @@ async function RandomPoems() {
   );
 }
 
+const DYNASTY_ORDER = ["楚辞", "诗经", "唐", "宋词", "元", "现代"];
+
 export default async function Home({ searchParams }: Props) {
   const query = searchParams.q?.trim() ?? "";
   const selectedDynasties = searchParams.d ? searchParams.d.split(",").filter(Boolean) : [];
-  const allDynasties = await getDynasties();
+  const rawDynasties = await getDynasties();
+  const allDynasties = [...rawDynasties].sort(
+    (a, b) => {
+      const ai = DYNASTY_ORDER.indexOf(a);
+      const bi = DYNASTY_ORDER.indexOf(b);
+      if (ai === -1 && bi === -1) return a.localeCompare(b, "zh");
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    }
+  );
 
   return (
     <main className="min-h-screen px-4 py-12">

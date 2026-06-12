@@ -40,6 +40,12 @@ variable "internet_bandwidth" {
   default     = 100
 }
 
+variable "instance_period" {
+  description = "包月时长（月）。PrePaid 计费下生效，到期需手动或自动续费"
+  type        = number
+  default     = 1
+}
+
 # --- 应用层参数（注入 cloud-init）---
 
 variable "repo_url" {

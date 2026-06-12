@@ -68,6 +68,11 @@ resource "alicloud_instance" "main" {
   system_disk_category = "cloud_essd"
   system_disk_size     = var.system_disk_size
 
+  # 包年包月（预付费）：比按量便宜约 30%，且不要求账户预留余额
+  instance_charge_type = "PrePaid"
+  period               = var.instance_period
+  period_unit          = "Month"
+
   # 分配公网 IP（按流量计费：闲时不花钱，只为实际跑出的流量付费，
   # 适合文本为主、大部分时间空闲的站点。max_bandwidth_out 仅为峰值上限，不固定收费）
   internet_charge_type       = "PayByTraffic"

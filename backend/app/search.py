@@ -80,15 +80,20 @@ def get_by_id(poem_id: str) -> PoemResult | None:
     )
 
 
-def random_poems(limit: int = 6) -> list[PoemResult]:
+def random_poems(limit: int = 6, dynasty: str | None = None) -> list[PoemResult]:
     client = get_client()
-    # Qdrant scroll with random offset for variety
-    total = client.count(collection_name=COLLECTION).count
+    scroll_filter = None
+    if dynasty:
+        scroll_filter = Filter(
+            must=[FieldCondition(key="dynasty", match=MatchAny(any=[dynasty]))]
+        )
+    total = client.count(collection_name=COLLECTION, count_filter=scroll_filter).count
     offset = random.randint(0, max(0, total - limit))
     results, _ = client.scroll(
         collection_name=COLLECTION,
         limit=limit,
         offset=offset,
+        scroll_filter=scroll_filter,
         with_payload=True,
     )
     return [

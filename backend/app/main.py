@@ -65,9 +65,9 @@ def get_poem(poem_id: str):
 
 
 @app.get("/poems/random", response_model=list[PoemResult])
-def random_poems(limit: int = 6):
+def random_poems(limit: int = 6, dynasty: str | None = None):
     limit = max(1, min(limit, 20))
-    return search.random_poems(limit)
+    return search.random_poems(limit, dynasty=dynasty)
 
 
 @app.get("/health")

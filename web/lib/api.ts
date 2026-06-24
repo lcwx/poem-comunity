@@ -33,10 +33,16 @@ export async function getDynasties(): Promise<string[]> {
   return res.json();
 }
 
-export async function randomPoems(limit = 6): Promise<Poem[]> {
-  const res = await fetch(`${BASE}/poems/random?limit=${limit}`, {
-    cache: "no-store",
-  });
+export async function randomPoems(limit = 6, dynasty?: string): Promise<Poem[]> {
+  const url = dynasty
+    ? `/api/poems/random?limit=${limit}&dynasty=${encodeURIComponent(dynasty)}`
+    : `/api/poems/random?limit=${limit}`;
+  const res = await fetch(
+    typeof window === "undefined"
+      ? `${process.env.BACKEND_URL ?? "http://backend:8000"}/poems/random?limit=${limit}${dynasty ? `&dynasty=${encodeURIComponent(dynasty)}` : ""}`
+      : url,
+    { cache: "no-store" }
+  );
   if (!res.ok) throw new Error(`random poems failed: ${res.status}`);
   return res.json();
 }

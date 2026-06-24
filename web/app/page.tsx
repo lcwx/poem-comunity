@@ -85,23 +85,34 @@ async function PoemResults({
 }
 
 async function RandomPoems() {
-  let poems: Poem[] = [];
   try {
-    poems = await randomPoems(6);
+    // 诗经2首、楚辞1首、唐诗2首、宋词1首，打乱顺序
+    const [shijing, chuci, tang, songci] = await Promise.all([
+      randomPoems(2, "诗经"),
+      randomPoems(1, "楚辞"),
+      randomPoems(2, "唐"),
+      randomPoems(1, "宋词"),
+    ]);
+    const poems = [...shijing, ...chuci, ...tang, ...songci];
+    // Fisher-Yates 打乱
+    for (let i = poems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [poems[i], poems[j]] = [poems[j], poems[i]];
+    }
+    if (poems.length === 0) return null;
+    return (
+      <>
+        <h2 className="text-base text-gray-500 mb-4 text-center">今日推荐</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {poems.map((poem) => (
+            <PoemCard key={poem.id} poem={poem} />
+          ))}
+        </div>
+      </>
+    );
   } catch {
     return null;
   }
-  if (poems.length === 0) return null;
-  return (
-    <>
-      <h2 className="text-base text-gray-500 mb-4 text-center">今日推荐</h2>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {poems.map((poem) => (
-          <PoemCard key={poem.id} poem={poem} />
-        ))}
-      </div>
-    </>
-  );
 }
 
 const DYNASTY_ORDER = ["楚辞", "诗经", "唐", "宋词", "元", "现代"];
